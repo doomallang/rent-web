@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { cars } from "@/data/cars";
+import { cars, companies } from "@/data/cars";
 import CarCard from "@/components/cars/CarCard";
 
 export default function FeaturedCars() {
   const featured = cars.filter((c) => c.available).slice(0, 4);
+  const companyMap = Object.fromEntries(companies.map((c) => [c.id, c]));
 
   return (
     <section className="py-16 md:py-20 bg-gray-50">
@@ -30,15 +31,12 @@ export default function FeaturedCars() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featured.map((car) => (
-            <CarCard key={car.id} car={car} />
+            <CarCard key={car.id} car={car} company={companyMap[car.companyId]} />
           ))}
         </div>
 
         <div className="sm:hidden mt-6 text-center">
-          <Link
-            href="/cars"
-            className="inline-flex items-center gap-1 text-blue-600 font-medium"
-          >
+          <Link href="/cars" className="inline-flex items-center gap-1 text-blue-600 font-medium">
             전체 차량 보기
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

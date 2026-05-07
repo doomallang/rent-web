@@ -1,8 +1,33 @@
-import { Car } from "@/types";
+import { Car, Company } from "@/types";
+
+export const companies: Company[] = [
+  {
+    id: "c1",
+    name: "하나렌터카",
+    description: "전국 10개 지점 운영, 24시간 긴급출동 서비스 제공",
+    phone: "1588-1234",
+    color: "blue",
+  },
+  {
+    id: "c2",
+    name: "스카이렌터카",
+    description: "공항 픽업 전문, 깨끗하고 관리된 차량",
+    phone: "1588-5678",
+    color: "sky",
+  },
+  {
+    id: "c3",
+    name: "제주드라이브",
+    description: "제주 전문 렌터카, 현지 최저가 보장",
+    phone: "064-000-0000",
+    color: "green",
+  },
+];
 
 export const cars: Car[] = [
   {
     id: "1",
+    companyId: "c1",
     name: "아반떼 CN7",
     brand: "현대",
     category: "compact",
@@ -18,6 +43,7 @@ export const cars: Car[] = [
   },
   {
     id: "2",
+    companyId: "c1",
     name: "쏘나타 DN8",
     brand: "현대",
     category: "compact",
@@ -33,6 +59,7 @@ export const cars: Car[] = [
   },
   {
     id: "3",
+    companyId: "c2",
     name: "투싼 NX4",
     brand: "현대",
     category: "suv",
@@ -48,6 +75,7 @@ export const cars: Car[] = [
   },
   {
     id: "4",
+    companyId: "c2",
     name: "팰리세이드",
     brand: "현대",
     category: "suv",
@@ -63,6 +91,7 @@ export const cars: Car[] = [
   },
   {
     id: "5",
+    companyId: "c1",
     name: "G80",
     brand: "제네시스",
     category: "luxury",
@@ -78,6 +107,7 @@ export const cars: Car[] = [
   },
   {
     id: "6",
+    companyId: "c3",
     name: "카니발 KA4",
     brand: "기아",
     category: "van",
@@ -93,6 +123,7 @@ export const cars: Car[] = [
   },
   {
     id: "7",
+    companyId: "c2",
     name: "아이오닉6",
     brand: "현대",
     category: "compact",
@@ -108,6 +139,7 @@ export const cars: Car[] = [
   },
   {
     id: "8",
+    companyId: "c3",
     name: "레이",
     brand: "기아",
     category: "economy",

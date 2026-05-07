@@ -1,5 +1,14 @@
+export interface Company {
+  id: string;
+  name: string;
+  description: string;
+  phone: string;
+  color: string;
+}
+
 export interface Car {
   id: string;
+  companyId: string;
   name: string;
   brand: string;
   category: "economy" | "compact" | "suv" | "luxury" | "van";

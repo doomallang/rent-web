@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { cars } from "@/data/cars";
+import { cars, companies } from "@/data/cars";
 import { Car } from "@/types";
 import CarCard from "@/components/cars/CarCard";
 
@@ -23,6 +23,7 @@ const fuelTypes: { value: Car["fuelType"] | "all"; label: string }[] = [
 ];
 
 export default function CarsPage() {
+  const [companyId, setCompanyId] = useState<string>("all");
   const [category, setCategory] = useState<Car["category"] | "all">("all");
   const [fuelType, setFuelType] = useState<Car["fuelType"] | "all">("all");
   const [maxPrice, setMaxPrice] = useState<number>(200000);
@@ -32,6 +33,7 @@ export default function CarsPage() {
   const filtered = useMemo(() => {
     return cars
       .filter((car) => {
+        if (companyId !== "all" && car.companyId !== companyId) return false;
         if (category !== "all" && car.category !== category) return false;
         if (fuelType !== "all" && car.fuelType !== fuelType) return false;
         if (car.pricePerDay > maxPrice) return false;
@@ -43,7 +45,12 @@ export default function CarsPage() {
         if (sortBy === "price_desc") return b.pricePerDay - a.pricePerDay;
         return a.name.localeCompare(b.name);
       });
-  }, [category, fuelType, maxPrice, onlyAvailable, sortBy]);
+  }, [companyId, category, fuelType, maxPrice, onlyAvailable, sortBy]);
+
+  const companyMap = useMemo(
+    () => Object.fromEntries(companies.map((c) => [c.id, c])),
+    []
+  );
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -51,6 +58,33 @@ export default function CarsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-extrabold text-gray-900">차량 둘러보기</h1>
           <p className="text-gray-500 mt-1">총 {filtered.length}대의 차량이 있습니다</p>
+
+          {/* 업체 필터 탭 */}
+          <div className="flex gap-2 mt-4 flex-wrap">
+            <button
+              onClick={() => setCompanyId("all")}
+              className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                companyId === "all"
+                  ? "bg-gray-900 text-white border-gray-900"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+              }`}
+            >
+              전체 업체
+            </button>
+            {companies.map((company) => (
+              <button
+                key={company.id}
+                onClick={() => setCompanyId(company.id)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                  companyId === company.id
+                    ? "bg-gray-900 text-white border-gray-900"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+                }`}
+              >
+                {company.name}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -130,6 +164,15 @@ export default function CarsPage() {
                 </label>
               </div>
             </div>
+
+            {/* 선택된 업체 정보 */}
+            {companyId !== "all" && companyMap[companyId] && (
+              <div className="mt-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+                <h3 className="font-bold text-gray-900 mb-2">{companyMap[companyId].name}</h3>
+                <p className="text-sm text-gray-500 mb-3">{companyMap[companyId].description}</p>
+                <p className="text-sm font-semibold text-blue-600">{companyMap[companyId].phone}</p>
+              </div>
+            )}
           </aside>
 
           {/* 차량 목록 */}
@@ -157,7 +200,7 @@ export default function CarsPage() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filtered.map((car) => (
-                  <CarCard key={car.id} car={car} />
+                  <CarCard key={car.id} car={car} company={companyMap[car.companyId]} />
                 ))}
               </div>
             )}

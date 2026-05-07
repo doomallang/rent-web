@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Car } from "@/types";
+import { Car, Company } from "@/types";
 
 const categoryLabel: Record<Car["category"], string> = {
   economy: "경형",
@@ -27,16 +27,20 @@ const carColors: Record<string, string> = {
   "8": "from-orange-300 to-orange-500",
 };
 
-export default function CarCard({ car }: { car: Car }) {
+const companyColorMap: Record<string, string> = {
+  blue: "bg-blue-100 text-blue-700",
+  sky: "bg-sky-100 text-sky-700",
+  green: "bg-green-100 text-green-700",
+};
+
+export default function CarCard({ car, company }: { car: Car; company?: Company }) {
   return (
     <Link href={`/cars/${car.id}`} className="group block">
       <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group-hover:-translate-y-1">
         <div className={`relative h-48 bg-gradient-to-br ${carColors[car.id] ?? "from-blue-400 to-blue-600"} flex items-center justify-center`}>
           {!car.available && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
-              <span className="bg-white text-gray-800 font-bold px-4 py-1 rounded-full text-sm">
-                예약불가
-              </span>
+              <span className="bg-white text-gray-800 font-bold px-4 py-1 rounded-full text-sm">예약불가</span>
             </div>
           )}
           <svg className="w-32 h-20 text-white/80" fill="currentColor" viewBox="0 0 100 50">
@@ -50,6 +54,11 @@ export default function CarCard({ car }: { car: Car }) {
         </div>
 
         <div className="p-5">
+          {company && (
+            <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full mb-2 ${companyColorMap[company.color] ?? "bg-gray-100 text-gray-600"}`}>
+              {company.name}
+            </span>
+          )}
           <div className="flex justify-between items-start mb-3">
             <div>
               <p className="text-xs text-gray-400 font-medium">{car.brand}</p>
@@ -57,9 +66,7 @@ export default function CarCard({ car }: { car: Car }) {
             </div>
             <div className="text-right">
               <p className="text-xs text-gray-400">1일</p>
-              <p className="font-bold text-blue-600 text-lg">
-                {car.pricePerDay.toLocaleString()}원
-              </p>
+              <p className="font-bold text-blue-600 text-lg">{car.pricePerDay.toLocaleString()}원</p>
             </div>
           </div>
 
