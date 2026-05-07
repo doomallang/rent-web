@@ -89,23 +89,6 @@ export default function LoginPage() {
               로그인
             </button>
           </form>
-
-          {/* 데모 계정 */}
-          <div className="mt-6 pt-6 border-t border-gray-800">
-            <p className="text-gray-500 text-xs mb-3">데모 계정으로 빠르게 체험</p>
-            <div className="grid grid-cols-2 gap-2">
-              {DEMO_ACCOUNTS.map((acc) => (
-                <button
-                  key={acc.email}
-                  onClick={() => fillDemo(acc.email, acc.password)}
-                  className="text-left px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  <p className="text-white text-xs font-medium">{acc.label}</p>
-                  <p className="text-gray-500 text-xs truncate">{acc.email}</p>
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>
