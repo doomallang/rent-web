@@ -1,7 +1,39 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx create-next-app@latest *)"
+      "Bash(npx create-next-app@latest *)",
+      "Bash(npm run *)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/cars)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/cars/1)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/booking)",
+      "Bash(curl *)",
+      "Bash(open *)",
+      "Bash(gh auth *)",
+      "WebFetch(domain:rent-web-pied.vercel.app)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(node *)",
+      "Bash(npx tsc *)",
+      "Bash(npx next *)",
+      "Bash(python3 -m json.tool)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(f'bookings: {len\\(d\\)}건'\\); [print\\(f'  {b[\\\\\"customerName\\\\\"]} | {b[\\\\\"status\\\\\"]} | {b[\\\\\"car\\\\\"][\\\\\"name\\\\\"]}'\\) for b in d[:5]]\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(f'cars: {len\\(d\\)}대'\\); [print\\(f'  {c[\\\\\"brand\\\\\"]} {c[\\\\\"name\\\\\"]} | {c[\\\\\"category\\\\\"]} | {c[\\\\\"company\\\\\"][\\\\\"name\\\\\"]}'\\) for c in d]\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(f'locations: {len\\(d\\)}개'\\); [print\\(f'  {l[\\\\\"name\\\\\"]} | {l[\\\\\"company\\\\\"][\\\\\"name\\\\\"]}'\\) for l in d]\")",
+      "Bash(python3 -c \"import json,sys; [print\\(f'{c[\\\\\"slug\\\\\"]}: {c[\\\\\"id\\\\\"]}'\\) for c in json.load\\(sys.stdin\\)]\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(f'slug 필터 테스트: {d[0][\\\\\"name\\\\\"]} / id={d[0][\\\\\"id\\\\\"]}'\\)\")",
+      "Bash(python3 -c \"import json,sys; p=json.load\\(sys.stdin\\); [print\\(k,v\\) for k,v in {**p.get\\('dependencies',{}\\), **p.get\\('devDependencies',{}\\)}.items\\(\\)]\")",
+      "Bash(python3 -c \"import json,sys; cars=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:v for k,v in cars[0].items\\(\\) if k in ['name','weekendPrice','holidayPrice','imageUrl','pricingRules']}, ensure_ascii=False, indent=2\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; cars=json.load\\(sys.stdin\\); print\\(list\\(cars[0].keys\\(\\)\\)\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(echo \"Started PID: $!\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('name:', d['name'], '| images:', d['images']\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('id:', d.get\\('id'\\), '| status:', d.get\\('status'\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; cars=json.load\\(sys.stdin\\); [print\\(c['name'], '| images:', c['images']\\) for c in cars[:3]]\")"
     ]
   }
 }

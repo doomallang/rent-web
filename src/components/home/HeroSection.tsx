@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { locations } from "@/data/cars";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 export default function HeroSection() {
   const router = useRouter();
@@ -49,18 +50,12 @@ export default function HeroSection() {
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
                 픽업 장소
               </label>
-              <select
+              <CustomSelect
                 value={pickupLocation}
-                onChange={(e) => setPickupLocation(e.target.value)}
-                className="border border-gray-200 rounded-lg px-3 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-              >
-                <option value="">지점을 선택하세요</option>
-                {locations.map((loc) => (
-                  <option key={loc} value={loc}>
-                    {loc}
-                  </option>
-                ))}
-              </select>
+                onChange={setPickupLocation}
+                options={[...locations.map((loc) => ({ value: loc, label: loc }))]}
+                placeholder="지점을 선택하세요"
+              />
             </div>
 
             <div className="flex flex-col gap-1">

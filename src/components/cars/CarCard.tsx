@@ -2,18 +2,18 @@ import Link from "next/link";
 import { Car, Company } from "@/types";
 
 const categoryLabel: Record<Car["category"], string> = {
-  economy: "경형",
-  compact: "준중형/중형",
-  suv: "SUV",
-  luxury: "럭셔리",
-  van: "미니밴",
+  ECONOMY: "경형",
+  COMPACT: "준중형/중형",
+  SUV: "SUV",
+  LUXURY: "럭셔리",
+  VAN: "미니밴",
 };
 
 const fuelLabel: Record<Car["fuelType"], string> = {
-  gasoline: "가솔린",
-  diesel: "디젤",
-  electric: "전기",
-  hybrid: "하이브리드",
+  GASOLINE: "가솔린",
+  DIESEL: "디젤",
+  ELECTRIC: "전기",
+  HYBRID: "하이브리드",
 };
 
 const carColors: Record<string, string> = {
@@ -33,25 +33,48 @@ const companyColorMap: Record<string, string> = {
   green: "bg-green-100 text-green-700",
 };
 
-export default function CarCard({ car, company }: { car: Car; company?: Company }) {
+export default function CarCard({ car, company, slug }: { car: Car; company?: Company; slug?: string }) {
+  const href = slug ? `/${slug}/cars/${car.id}` : `/cars/${car.id}`;
   return (
-    <Link href={`/cars/${car.id}`} className="group block">
+    <Link href={href} className="group block">
       <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group-hover:-translate-y-1">
-        <div className={`relative h-48 bg-gradient-to-br ${carColors[car.id] ?? "from-blue-400 to-blue-600"} flex items-center justify-center`}>
-          {!car.available && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
-              <span className="bg-white text-gray-800 font-bold px-4 py-1 rounded-full text-sm">예약불가</span>
+        {(() => {
+          const thumb = car.images?.[0] ?? car.imageUrl;
+          return thumb ? (
+            <div className="relative h-48 overflow-hidden">
+              <img src={thumb} alt={car.name} className="w-full h-full object-cover" />
+              {!car.available && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+                  <span className="bg-white text-gray-800 font-bold px-4 py-1 rounded-full text-sm">예약불가</span>
+                </div>
+              )}
+              {(car.images?.length ?? 0) > 1 && (
+                <span className="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] font-medium px-1.5 py-0.5 rounded-full">
+                  +{(car.images?.length ?? 0) - 1}
+                </span>
+              )}
+              <span className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-full">
+                {categoryLabel[car.category]}
+              </span>
             </div>
-          )}
-          <svg className="w-32 h-20 text-white/80" fill="currentColor" viewBox="0 0 100 50">
-            <path d="M10,35 L15,20 Q20,10 35,10 L65,10 Q75,10 82,18 L90,28 L92,35 Q92,40 87,40 L80,40 Q78,45 70,45 Q62,45 60,40 L40,40 Q38,45 30,45 Q22,45 20,40 L13,40 Q8,40 8,35 Z" />
-            <circle cx="30" cy="40" r="7" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
-            <circle cx="70" cy="40" r="7" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
-          </svg>
-          <span className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-full">
-            {categoryLabel[car.category]}
-          </span>
-        </div>
+          ) : (
+            <div className={`relative h-48 bg-gradient-to-br ${carColors[car.id] ?? "from-blue-400 to-blue-600"} flex items-center justify-center`}>
+              {!car.available && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+                  <span className="bg-white text-gray-800 font-bold px-4 py-1 rounded-full text-sm">예약불가</span>
+                </div>
+              )}
+              <svg className="w-32 h-20 text-white/80" fill="currentColor" viewBox="0 0 100 50">
+                <path d="M10,35 L15,20 Q20,10 35,10 L65,10 Q75,10 82,18 L90,28 L92,35 Q92,40 87,40 L80,40 Q78,45 70,45 Q62,45 60,40 L40,40 Q38,45 30,45 Q22,45 20,40 L13,40 Q8,40 8,35 Z" />
+                <circle cx="30" cy="40" r="7" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
+                <circle cx="70" cy="40" r="7" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
+              </svg>
+              <span className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-full">
+                {categoryLabel[car.category]}
+              </span>
+            </div>
+          );
+        })()}
 
         <div className="p-5">
           {company && (
@@ -63,6 +86,9 @@ export default function CarCard({ car, company }: { car: Car; company?: Company 
             <div>
               <p className="text-xs text-gray-400 font-medium">{car.brand}</p>
               <h3 className="font-bold text-gray-900 text-lg">{car.name}</h3>
+              {car.location && (
+                <p className="text-xs text-blue-500 font-medium mt-0.5">{car.location.name}</p>
+              )}
             </div>
             <div className="text-right">
               <p className="text-xs text-gray-400">1일</p>
@@ -81,7 +107,7 @@ export default function CarCard({ car, company }: { car: Car; company?: Company 
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
               </svg>
-              {car.transmission === "auto" ? "자동" : "수동"}
+              {car.transmission === "AUTO" ? "자동" : "수동"}
             </span>
             <span className="flex items-center gap-1">
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

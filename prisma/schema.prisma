@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Company {
+  id           String     @id @default(cuid())
+  slug         String     @unique
+  name         String
+  description  String     @default("")
+  phone        String     @default("")
+  color        String     @default("blue")
+  primaryColor String     @default("#2563EB")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  cars         Car[]
+  locations    Location[]
+  bookings     Booking[]
+}
+
+model Car {
+  id           String       @id @default(cuid())
+  companyId    String
+  name         String
+  brand        String
+  category     CarCategory
+  year         Int
+  seats        Int
+  transmission Transmission
+  fuelType     FuelType
+  pricePerDay  Int
+  weekendPrice Int?
+  holidayPrice Int?
+  features     String[]
+  description  String       @default("")
+  imageUrl     String?
+  images       String[]
+  locationId   String?
+  available    Boolean      @default(true)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  company      Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  location     Location?    @relation(fields: [locationId], references: [id], onDelete: SetNull)
+  bookings     Booking[]
+  pricingRules PricingRule[]
+}
+
+model PricingRule {
+  id        String   @id @default(cuid())
+  carId     String
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  startDate DateTime
+  endDate   DateTime
+  price     Int
+  label     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  companyId String
+  name      String
+  address   String   @default("")
+  phone     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  cars      Car[]
+}
+
+model Booking {
+  id             String        @id @default(cuid())
+  carId          String?
+  companyId      String?
+  customerName   String
+  customerPhone  String
+  customerEmail  String
+  driverLicense  String        @default("")
+  pickupLocation String
+  returnLocation String
+  pickupDate     DateTime
+  returnDate     DateTime
+  status         BookingStatus @default(PENDING)
+  totalPrice     Int
+  requests       String        @default("")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  car            Car?          @relation(fields: [carId], references: [id], onDelete: SetNull)
+  company        Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)
+}
+
+enum CarCategory {
+  ECONOMY
+  COMPACT
+  SUV
+  LUXURY
+  VAN
+}
+
+enum Transmission {
+  AUTO
+  MANUAL
+}
+
+enum FuelType {
+  GASOLINE
+  DIESEL
+  ELECTRIC
+  HYBRID
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
